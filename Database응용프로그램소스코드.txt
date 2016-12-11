@@ -1,0 +1,981 @@
+package com.student.project;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.sqlite.SQLiteDatabase;
+import android.database.sqlite.SQLiteOpenHelper;
+import android.util.Log;
+
+import java.util.ArrayList;
+
+
+public class DBHelper extends SQLiteOpenHelper {
+
+    // DBHelper 생성자로 관리할 DB 이름과 버전 정보를 받음
+    public DBHelper(Context context, String name, SQLiteDatabase.CursorFactory factory, int version) {
+        super(context, name, factory, version);
+    }
+
+    // DB를 새로 생성할 때 호출되는 함수
+    @Override
+    public void onCreate(SQLiteDatabase db) {
+        // 새로운 테이블 생성
+        db.execSQL("CREATE TABLE recipe_nation (id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name TEXT ,beef TEXT ," +
+                "pork TEXT ,chicken TEXT ,onion TEXT ,springonion TEXT ,ginger TEXT ,garlic TEXT ,pepper TEXT ,kimchi TEXT ," +
+                "egg TEXT ,milk TEXT ,water TEXT ,cookingwine TEXT ,fish TEXT ,mushroom TEXT ,shellfish TEXT ,shrimp TEXT ," +
+                "rice TEXT ,bellpepper TEXT ,pumpkin TEXT ,cookingoil TEXT ,soysauce TEXT ,sesameoil TEXT ,sesame TEXT ," +
+                "chilipowder TEXT ,powder TEXT ,cuttlefish TEXT ,veryhotpepper TEXT ,redpepperpaste TEXT ,sugar TEXT ," +
+                "carrot TEXT ,friuts TEXT ,othermaterials TEXT ,nation TEXT ,recipeuse TEXT );");
+
+
+        db.execSQL("CREATE TABLE student (studentID TEXT , department TEXT , studentname TEXT , password TEXT ," +
+                " major TEXT , refinement TEXT , MSCmath TEXT , MSCscience TEXT , MSCprocessing TEXT, avergrade TEXT);");
+
+        db.execSQL("CREATE TABLE license (id INTEGER PRIMARY KEY AUTOINCREMENT, license_list TEXT, department_license TEXT, information_license TEXT);");
+    }
+
+    // DB 업그레이드를 위해 버전이 변경될 때 호출되는 함수
+    @Override
+    public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+
+    }
+
+    public void insertStudent(String studentID, String department, String studentname, String password, String major
+                                , String refinement, String MSCmath, String MSCscience, String MSCprocessing, String avergrade) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        ContentValues values = new ContentValues();
+        values.put("studentID",studentID);
+        values.put("department",department);
+        values.put("studentname",studentname);
+        values.put("password",password);
+        values.put("major",major);
+        values.put("refinement",refinement);
+        values.put("MSCmath",MSCmath);
+        values.put("MSCscience",MSCscience);
+        values.put("MSCprocessing",MSCprocessing);
+        values.put("avergrade",avergrade);
+        db.insert("student",null,values);
+        /*db.execSQL("INSERT INTO calendar VALUES('" + contents + "', " + date + "');");*/
+        db.close();
+    }
+
+
+    public Student getStudent(String studentID) {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+        String result = "";
+
+        Student student = new Student();
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery("SELECT * FROM student WHERE studentID='" + studentID + "';", null);
+        if (cursor.moveToNext()) {
+            //result += cursor.getString(0);
+            student.studentID = cursor.getString(0);
+            student.department = cursor.getString(1);
+            student.studentname = cursor.getString(2);
+            student.password = cursor.getString(3);
+            student.major = cursor.getString(4);
+            student.refinement = cursor.getString(5);
+            student.MSCmath = cursor.getString(6);
+            student.MSCscience = cursor.getString(7);
+            student.MSCprocessing = cursor.getString(8);
+            student.avergrade = cursor.getString(9);
+
+        }
+
+        return student;
+    }
+
+   public void insertRecipe() {
+
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+
+        //데이터 입력
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'Shrimp Fried Rice','0','0','0','0','2root','0','1/2spoon','1/3spoon','0','2','0','0','0','0','0','0','100g','210g','1/4','1/3','1spoon','1spoon','1/2spoon','1Tspoon','0','0','0','0','0','0','0','0','0','korean','1. In a saucepan bring water to a boil. Add rice and stir. Reduce heat, cover and simmer for 20 minutes. Set aside and allow rice to cool./n 2. Heat a large skillet or wok for 2 minutes. When the skillet or wok is hot, pour in vegetable oil, bean sprouts and onions. Mix well and cook for 3 minutes./n 3. Mix in cooled rice and shrimp and cook for another 3 minutes. Stirring constantly. /n 4. Mix in green onions, eggs, salt ,pepper, soy sauce and sesame oil. Cook for another 4 minutes, stirring continuously, until eggs are cooked and everything is blended evenly.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'cuttlefish Kimchi pan cake','0','0','0','0','0','0','0','0','100g','0','0','100g','0','0','0','0','0','0','0','0','4spoon','0','0','0','1/2spoon','buchimpowder1/2spoon','80g','0','0','0','0','0','0','korean','1.Stir together the kimchi, kimchi juice, flour, eggs, and green onion in a bowl. /n 2.Heat vegetable oil over medium heat in a large skillet. Using about 1/4 cup of batter for each pancake, pour into skillet, spreading as thin as possible./n 3.Cook pancakes until set and lightly browned, turning once, 3 to 5 minutes per side. Season to taste with salt./n 4.Whisk together the rice vinegar, soy sauce, sesame oil, chili pepper flakes, and toasted sesame seeds. Serve with the pancakes.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'stir-fried spicy pork','0','300g','0','1/2','0','0','1spoon','1/6spoon','0','0','0','0','4spoon','0','0','0','0','0','0','0','0','3/2spoon','1spoon','0','0','0','0','2','2spoon','1spoon','0','0','0','korean','1. In a thick bottomed wok or pan./n 2. Heat up the pan over high heat./n 3. Mix and stir all ingredients with a wooden spoon, until the pork is cooked thoroughly. It will take about 10 minutes and the onion will look translucent and mushy when it is done./n 4. Transfer it to a serving plate and serve with a bowl of rice, some lettuce, a few more side dishes (if you want), some soup')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'bulgogi','250g','0','0','1/2','15cm','0','1spoon','little','0','0','0','300','1spoon','0','0','0','0','0','0','0','0','4spoon','1spoon','0','0','0','0','0','0','2spoon','1/8','0','cellophane noodles1/2','korean','1.In a large resealable plastic bag, combine soy sauce, sesame oil, sesame seeds, garlic, sugar, salt, black pepper, and MSG. Place beef, carrots, and onions in the bag./n 2.seal, and shake to coat the vegetables and beef with the sauce. Refrigerate for at least 2 1/2 hours. I prefer to marinate mine overnight./n 3.Preheat an outdoor grill for high heat. Remove meat and vegetables from marinade, and place on a large sheet of aluminum foil; seal. Discard marinade. /n 4.Place on grill, and cook for 15 to 20 minutes, or to desired doneness.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'jajangmyeon','0','200g','0','1/4','1/4','0','0','0','0','0','0','little','0','0','0','0','0','0','0','0','little','0','0','0','0','ja-jangpowder2~3','0','0','0','0','1/5','0','noodle','chinese','1. Bring a large pot of water to a boil and add noodles. Boil the noodles for 8 minutes until soft (just beyond al dente). Reserve 1 1/2 cups of the noodle cooking water, drain the noodles, and rinse with cold water to cool to room temperature. Drain well and reserve./n 2. While the noodles are boiling, heat 2 tablespoons of vegetable oil on high heat in a wok or large skillet until lightly smoking. Add diced pork belly and shoulder and render for 2 minutes. /n 3. Add ginger and garlic and saute for 1 minute, being mindful not to burn. Add carrots, potatoes, onions, and zucchini and saute for 6 minutes, until vegetables are softened. /n 4. Mix in the chunjang, sugar, 1 cup of noodle water, and salt to taste. Cook for 7 minutes, or until the sauce has thickened and the potatoes are fully cooked. If you need to add more noodle water, do so./n 5. Divide noodles into 2 bowls and top with warm sauce. Garnish with julienned zucchini and pickled yellow daikon, if using. As an alternative, the sauce can be served over cooked rice for a dish called jjajangbap.')");
+
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'bulgogi jjamppong','200g','0','0','1/4','1','2g','1/2spoon','1/2spoon','0','0','0','700','1spoon','mussel130g','0','0','10g','0','0','0','0','3spoon','0','0','3/2','0','0','5g','0','1spoon','20g','0','cabbage40g chives20g','chinese','1. Put chopped garlic, sugar, soy sauce, pepper, and sake in a bowl and make a bulgogi sauce./n 2. Onions and green onions are cut well and put on a marinade with beef./n 3. Put pan and ginger in the pan and crush them./n 4. Put the dried prawns and fry, then add the cabbage, carrots and onions, fry them, add the soy sauce, and roast the vegetables until they breathe./n 5. Put red pepper powder and Cheongyang red pepper./n 6. Add mussel, stir-fry, add water and boil./n 7. Fry the roasted meat on the pan./n 8. If you put chanpon and bulgogi on boiled noodles, it is completed.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'Shrimp with Chili Sauce','0','0','0','0','1/3','0','4','0','0','1','0','2/3cup','1spoon','0','0','0','12','0','0','0','little','1spoon','0','0','0','starch powder3spoon','0','1','0','2spoon','0','0','Ketchup 3spoon oyster sauce 0.5spoon','chinese','1.Rinse shrimp in cold water and pat dry with paper towels./n 2.Set up 3 shallow bowls. In the first, stir together 1/4 cup flour, 1/2 teaspoon garlic powder and 1/2 teaspoon salt. In the second, add eggs and lightly beat with a fork. In the third, combine 1 1/2 cups coconut flakes and 1/2 cup panko bread crumbs./n 3.Dredge shrimp in flour, dip in beaten egg and then finally dip in coconut crumb mixture using your hands to press the mixture onto the shrimp. Transfer to a Reynolds(R) Parchment Paper lined baking sheet and repeat with remaining shrimp. Once all of the shrimp are breaded, saute right away./n 4.Place a large non-stick pan over medium heat and add enough oil to generously cover the bottom. Once oil is hot, add shrimp and saute 2 to 3 minutes, flip and saute another 2 minutes until golden brown on both sides and shrimp is firm and pink. Cook in batches and do not overcrowd the pan. /n 5.Stir together the sweet chili sauce and apricot preserves and serve with coconut shrimp.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'tonkatsu','0g','a pork cutlet1','0','1/2','0','0','0','0','0','2','0','0','0','0','0','0','0','1person','0','0','0','0','0','0','0','0','0','0','0','0','0','0','katsuo soup3spoon,a crown daisy1','japanese','1.Mix dashi, sugar, mirim, soy sauce, and salt together in a small bowl./n 2.Heat vegetable oil in a small skillet over medium heat. Add onion; cook and stir until translucent, about 5 minutes. Stir in dashi mixture. tonkatsu slices carefully on top of the onions. /n 3.Drizzle eggs around the slices. Cover skillet and cook until eggs are set, about 2 minutes. /n 4.Divide rice between 2 bowls. Top each with half the onions, eggs, and pork slices.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'a bowl of rice teriyaki chicken','0','0','250g','0','0','0','1spoon','1/3spoon','0','0','0','0','1spoon','0','0','4','0','1person','0','0','2spoon','2spoon','0','little','0','0','0','0','0','0','0','tomato 4','been1/2 honey1spoon','japanese','1. In a large bowl, whisk together all marinade ingredients: 1/4 cup soy sauce, 1/3 cup orange juice, 3 Tbsp honey, 1 tsp ginger and 1 tsp sesame oil./n 2. Cut chicken into 1-inch pieces and place into marinade. Stir and cover with plastic wrap and marinate on the counter 20 min./n 3. Heat a large non-stick pan over medium-high heat. Add 1 Tbsp olive oil. Remove chicken from marinade with a slotted spoon, reserving marinade in the bowl. Add chicken to the hot pan and saute, stirring occasionally until golden and cooked through (5 min)./n 4. Remove pan from heat and transfer chicken to a bowl. (Don’t leave the empty pan over the heat or you may scorch the bottom of the pan and ruin the sauce ? been there, done that and if it happens to you, continue making the sauce using a clean pan)./n 5. Pour reserved marinade into the pan, add 1 1/2 Tbsp butter (it is in bold for my own sake because I have forgotten it before and it just was not the same) and place back over medium/high heat. Bring to a boil stirring constantly until slightly thickened (1 min) then remove from heat. Add chicken back to the pan and stir to combine./n 6. Divide rice bowls.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'oyakodon/a bowl of rice topped with scrambled eggs','0','0','250g','1/2','0','0','0','0','0','2','0','0','1.5spoon','0','anchovy4','dryshiitake1','0','1person','0','0','0','0','0','0','0','0','0','0','0','0','0','0','katsuo0.5cup kelp2 Mentsuyu3spoon ','japanese','1.Bring the rice and water to a boil in a saucepan; reduce heat to medium-low, cover, and simmer until the rice is tender and the liquid has been absorbed, 20 to 25 minutes./n 2.Bring the chicken stock to a boil in a small saucepan. Stir in the soy sauce and brown sugar until the sugar has dissolved. Reduce heat to low; keep warm./n 3.Heat several tablespoons of the chicken sauce in a skillet over medium heat. Cook and stir the onion and shiitake mushrooms in the sauce until the onion has softened, about 3 minutes. Add the chicken, green onions, and a few more tablespoons of the sauce./n 4.continue cooking until the chicken is no longer pink in the center, about 5 minutes more. Spread the chicken mixture evenly over the skillet; pour the beaten egg overtop. Reduce heat to medium-low and sprinkle with the snow peas. Cook and stir until the egg has firmed and is no longer runny, about 3 minutes./n 5.Divide the rice between two bowls and spoon the egg mixture evenly overtop. Pour additional chicken sauce over the rice to serve.')");
+
+
+        db.close();
+    }
+
+    public void insertLicense() {
+
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+
+        //데이터 입력
+        db.execSQL("INSERT INTO license VALUES(null,'Industrial Engineer Information Processing','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Industrial Engineer Information Processing')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Information Management','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Professional Engineer Information Management')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Computer System Application','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Professional Engineer Computer System Application')");
+        db.execSQL("INSERT INTO license VALUES(null,'Industrial Engineer Electricity','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Industrial Engineer Electricity')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Electric Work','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Engineer Electric Work')");
+
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Building Electrical Facilities','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Professional Engineer Building Electrical Facilities')");
+        db.execSQL("INSERT INTO license VALUES(null,'Craftsman Electronic Apparatus','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Craftsman Electronic Apparatus')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Electronic Application','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Professional Engineer Electronic Application')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Semiconductor Design','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Engineer Semiconductor Design')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Chemical Analysis','chemistry','http://www.q-net.or.kr/crf005.do -> Select chemistry from the list -> Select Engineer Chemical Analysis')");
+
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Chemical Industry','chemistry','http://www.q-net.or.kr/crf005.do -> Select chemistry from the list -> Select Professional Engineer Chemical Industry')");
+        db.close();
+    }
+
+    public ArrayList<License> getLicense() {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+
+        ArrayList<License> list = new ArrayList<>();
+
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery("SELECT * FROM license ;", null);
+        while (cursor.moveToNext()) {
+            //result += cursor.getString(0);
+            License  license = new License();
+            license.setNumber(cursor.getInt(0));
+            license.setList(cursor.getString(1));
+            license.setDepartment(cursor.getString(2));
+            license.setInformation(cursor.getString(3));
+
+            list.add(license);//리스트에 한묶음씩 넣는다
+        }
+
+        return list;
+    }
+
+    public ArrayList<Recipe> getRecipe() {
+        // 읽기가 가능하게 DB 열기
+        SQLiteDatabase db = getReadableDatabase();
+
+        ArrayList<Recipe> list = new ArrayList<>();
+        // DB에 있는 데이터를 쉽게 처리하기 위해 Cursor를 사용하여 테이블에 있는 모든 데이터 출력
+        Cursor cursor = db.rawQuery("SELECT * FROM recipe_nation ;", null);
+        while (cursor.moveToNext()) {
+            //result += cursor.getString(0);
+
+            Recipe recipe = new Recipe();
+
+            recipe.number = cursor.getInt(0);
+            recipe.recipe_name = cursor.getString(1);
+
+            recipe.beef = cursor.getString(2);
+            recipe.pork = cursor.getString(3);
+            recipe.chicken = cursor.getString(4);
+            recipe.onion = cursor.getString(5);
+            recipe.springonion = cursor.getString(6);
+            recipe.ginger = cursor.getString(7);
+            recipe.garlic = cursor.getString(8);
+            recipe.pepper = cursor.getString(9);
+            recipe.kimchi = cursor.getString(10);
+            recipe.egg = cursor.getString(11);
+            recipe.milk = cursor.getString(12);
+            recipe.water = cursor.getString(13);
+            recipe.cookingwine = cursor.getString(14);
+            recipe.fish = cursor.getString(15);
+            recipe.mushroom = cursor.getString(16);
+            recipe.shellfish = cursor.getString(17);
+            recipe.shrimp = cursor.getString(18);
+            recipe.rice = cursor.getString(19);
+            recipe.bellpepper = cursor.getString(20);
+            recipe.pumpkin = cursor.getString(21);
+            recipe.cookingoil = cursor.getString(22);
+            recipe.soysauce = cursor.getString(23);
+            recipe.sesameoil = cursor.getString(24);
+            recipe.sesame = cursor.getString(25);
+            recipe.chilipowder = cursor.getString(26);
+            recipe.powder = cursor.getString(27);
+            recipe.cuttlefish = cursor.getString(28);
+            recipe.veryhotpepper = cursor.getString(29);
+            recipe.redpepperpaste = cursor.getString(30);
+            recipe.sugar = cursor.getString(31);
+            recipe.carrot = cursor.getString(32);
+            recipe.friuts = cursor.getString(33);
+            recipe.othermaterials = cursor.getString(34);
+            recipe.nation = cursor.getString(35);
+            recipe.recipeuse = cursor.getString(36);
+
+            list.add(recipe);
+        }
+
+
+
+        return list;
+    }
+}
+
+package com.student.project;
+
+public class License {
+    int number;
+    String list;
+    String department;
+    String information;
+
+
+    public int getNumber() {
+        return number;
+    }
+
+    public void setNumber(int number) {
+        this.number = number;
+    }
+
+
+    public String getList() {
+        return list;
+    }
+
+    public void setList(String list) {
+        this.list = list;
+    }
+
+    public String getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(String department) {
+        this.department = department;
+    }
+
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+}
+
+package com.student.project;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+public class LicenseAdapter extends BaseAdapter {
+    private ArrayList<License> listViewItemList = new ArrayList<License>() ;
+
+    @Override
+    public int getCount() {
+        return listViewItemList.size();
+    }
+
+    @Override
+    public Object getItem(int i) {
+        return listViewItemList.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        // "listview_item" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.item_license, parent, false);
+        }
+
+        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+        TextView numberView = (TextView) convertView.findViewById(R.id.license_number) ;
+        TextView nameView = (TextView) convertView.findViewById(R.id.license_name) ;
+        TextView contentsView = (TextView) convertView.findViewById(R.id.license_contents) ;
+
+        // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+        License listViewItem = listViewItemList.get(position);
+
+        // 아이템 내 각 위젯에 데이터 반영
+        String number = String.valueOf(listViewItem.getNumber()) + ".";
+        numberView.setText(number);
+        nameView.setText(listViewItem.getList());
+        contentsView.setText(listViewItem.getInformation());
+
+        return convertView;
+    }
+
+    //리스트에 데이터 추가
+    public void addItem(int number, String name, String contents) {
+        License item = new License();
+
+        item.setNumber(number);
+        item.setList(name);
+        item.setInformation(contents);
+
+        listViewItemList.add(item);
+    }
+}
+package com.student.project;
+
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ListView;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+public class LicenseListActivity extends AppCompatActivity {
+
+    private ListView listview;
+    private LicenseAdapter adapter;
+    private DBHelper dbHelper;
+    private TextView ID;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_license_list);
+
+        listview = (ListView) findViewById(R.id.license_list);
+        ID = (TextView) findViewById(R.id.license_list_id);
+
+        String studentID = getIntent().getStringExtra("studentID");//학번 받아오기
+        String department = getIntent().getStringExtra("department");//학과 받아오기
+
+        ID.setText("ID : "+studentID);
+
+        adapter = new LicenseAdapter() ;
+
+
+        dbHelper = new DBHelper(getApplicationContext(), "Student.db", null, 1);//db열기
+
+        ArrayList<License> licenseList = dbHelper.getLicense();//자격증 db정보 가져오기
+
+        if(licenseList.size() == 0){
+            dbHelper.insertLicense();//자격증 db정보 입력
+            licenseList = dbHelper.getLicense();
+        }
+
+        for (int i = 0; i< licenseList.size() ; i++){
+            if(licenseList.get(i).getDepartment().equals(department)){//학과 일치 확인
+                //자격증 정보 리스트에 추가
+                adapter.addItem(licenseList.get(i).getNumber(), licenseList.get(i).getList()
+                        ,licenseList.get(i).getInformation());
+            }
+        }
+
+        listview.setAdapter(adapter);
+        dbHelper.getRecipe();
+    }
+
+}
+package com.student.project;
+
+import android.content.Intent;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
+
+public class MainActivity extends AppCompatActivity {
+
+    Button loginBtn;
+    EditText id;
+    EditText password;
+    TextView registerText;
+    DBHelper dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_main);
+
+        loginBtn = (Button) findViewById(R.id.login_btn);
+        id = (EditText) findViewById(R.id.login_id);
+        password = (EditText) findViewById(R.id.login_pw);
+        registerText = (TextView) findViewById(R.id.register_btn);
+
+        dbHelper = new DBHelper(getApplicationContext(), "Student.db", null, 1);//디비 열기
+
+        //로그인 버튼
+        loginBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                Student student = dbHelper.getStudent(id.getText().toString().trim());//db에서 학생 정보 검색
+
+
+                if(student != null && TextUtils.equals(password.getText().toString(), student.password)){//비밀번호 비교
+                    Intent intent = new Intent(MainActivity.this, StudentInfoActivity.class);
+                    intent.putExtra("studentID",student.studentID);
+                    intent.putExtra("department",student.department);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(intent);
+                    finish();
+                }else{
+                    Toast.makeText(getApplicationContext(), "정보가 틀립니다.", Toast.LENGTH_SHORT);
+                }
+            }
+        });
+
+        //회원가입 버튼
+        registerText.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(MainActivity.this, ResisterActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+    }
+}
+package com.student.project;
+
+import android.os.Parcel;
+import android.os.Parcelable;
+
+public class Recipe{
+
+    int number;
+    String recipe_name;
+    String beef;
+    String pork;
+    String chicken;
+    String onion;
+    String springonion;
+    String ginger;
+    String garlic;
+    String pepper;
+    String kimchi;
+    String egg;
+    String milk;
+    String water;
+    String cookingwine;
+    String fish;
+    String mushroom;
+    String shellfish;
+    String shrimp;
+    String rice;
+    String bellpepper;
+    String pumpkin;
+    String cookingoil;
+    String soysauce;
+    String sesameoil;
+    String sesame;
+    String chilipowder;
+    String powder;
+    String cuttlefish;
+    String veryhotpepper;
+    String redpepperpaste;
+    String sugar;
+    String carrot;
+    String friuts;
+    String othermaterials;
+    String nation;
+    String recipeuse;
+
+}
+package com.student.project;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ListView;
+
+import java.util.ArrayList;
+
+public class RecipeListActivity extends AppCompatActivity {
+
+    private ListView listview;
+    private RecipeListAdapter adapter;
+    private DBHelper dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recipe_list);
+
+        listview = (ListView) findViewById(R.id.recipe_list);
+
+        adapter = new RecipeListAdapter() ;
+
+        dbHelper = new DBHelper(getApplicationContext(), "Student.db", null, 1);//디비열기
+
+        ArrayList<Recipe> recipeList = dbHelper.getRecipe();//레시피 db가져오기
+
+        if(recipeList.size() == 0){
+            dbHelper.insertRecipe();//레시피 db 입력
+            recipeList = dbHelper.getRecipe();
+        }
+
+        if(recipeList.size() >= 0){
+            adapter.addItem(recipeList);//리스트에 자료 추가
+        }
+
+        listview.setAdapter(adapter);
+
+        //하나의 레시피 클릭시
+        listview.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Recipe recipe = adapter.getItem(i);
+
+                Intent intent = new Intent(RecipeListActivity.this, RecipeShowActivity.class);
+                intent.putExtra("recipe_name", recipe.recipe_name);
+                StringBuilder sb = new StringBuilder("");
+
+                if(!recipe.beef.equals("0")){
+                    sb.append(recipe.beef+", ");
+                }
+                if(!recipe.pork.equals("0")){
+                    sb.append(recipe.pork+", ");
+                }
+                if(!recipe.chicken.equals("0")){
+                    sb.append(recipe.chicken+", ");
+                }
+                if(!recipe.onion.equals("0")){
+                    sb.append(recipe.onion+", ");
+                }
+                if(!recipe.springonion.equals("0")){
+                    sb.append(recipe.springonion+", ");
+                }
+                if(!recipe.ginger.equals("0")){
+                    sb.append(recipe.ginger+", ");
+                }
+                if(!recipe.garlic.equals("0")){
+                    sb.append(recipe.garlic+", ");
+                }
+                if(!recipe.pepper.equals("0")){
+                    sb.append(recipe.pepper+", ");
+                }
+                if(!recipe.kimchi.equals("0")){
+                    sb.append(recipe.kimchi+", ");
+                }
+                if(!recipe.egg.equals("0")){
+                    sb.append(recipe.egg+", ");
+                }
+                if(!recipe.milk.equals("0")){
+                    sb.append(recipe.milk+", ");
+                }
+                if(!recipe.water.equals("0")){
+                    sb.append(recipe.water+", ");
+                }
+                if(!recipe.cookingwine.equals("0")){
+                    sb.append(recipe.cookingwine+", ");
+                }
+                if(!recipe.fish.equals("0")){
+                    sb.append(recipe.fish+", ");
+                }
+                if(!recipe.mushroom.equals("0")){
+                    sb.append(recipe.mushroom+", ");
+                }
+                if(!recipe.shellfish.equals("0")){
+                    sb.append(recipe.shellfish+", ");
+                }
+                if(!recipe.shrimp.equals("0")){
+                    sb.append(recipe.shrimp+", ");
+                }
+                if(!recipe.rice.equals("0")){
+                    sb.append(recipe.rice+", ");
+                }
+                if(!recipe.bellpepper.equals("0")){
+                    sb.append(recipe.bellpepper+", ");
+                }
+                if(!recipe.pumpkin.equals("0")){
+                    sb.append(recipe.pumpkin+", ");
+                }
+                if(!recipe.cookingoil.equals("0")){
+                    sb.append(recipe.cookingoil+", ");
+                }
+                if(!recipe.soysauce.equals("0")){
+                    sb.append(recipe.soysauce+", ");
+                }
+                if(!recipe.sesameoil.equals("0")){
+                    sb.append(recipe.sesameoil+", ");
+                }
+                if(!recipe.sesame.equals("0")){
+                    sb.append(recipe.sesame+", ");
+                }
+                if(!recipe.soysauce.equals("0")){
+                    sb.append(recipe.soysauce+", ");
+                }
+                if(!recipe.chilipowder.equals("0")){
+                    sb.append(recipe.chilipowder+", ");
+                }
+                if(!recipe.powder.equals("0")){
+                    sb.append(recipe.powder+", ");
+                }
+                if(!recipe.cuttlefish.equals("0")){
+                    sb.append(recipe.cuttlefish+", ");
+                }
+                if(!recipe.veryhotpepper.equals("0")){
+                    sb.append(recipe.veryhotpepper+", ");
+                }
+                if(!recipe.redpepperpaste.equals("0")){
+                    sb.append(recipe.redpepperpaste+", ");
+                }
+                if(!recipe.sugar.equals("0")){
+                    sb.append(recipe.sugar+", ");
+                }
+                if(!recipe.carrot.equals("0")){
+                    sb.append(recipe.carrot+", ");
+                }
+                if(!recipe.friuts.equals("0")){
+                    sb.append(recipe.friuts+", ");
+                }
+                if(!recipe.othermaterials.equals("0")){
+                    sb.append(recipe.othermaterials);
+                }
+
+                intent.putExtra("material", sb.toString());
+                intent.putExtra("use", recipe.recipeuse);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+    }
+
+}
+package com.student.project;
+
+import android.content.Context;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.BaseAdapter;
+import android.widget.TextView;
+
+import java.util.ArrayList;
+
+
+public class RecipeListAdapter extends BaseAdapter {
+    private ArrayList<Recipe> listViewItemList = new ArrayList<Recipe>() ;
+
+    @Override
+    public int getCount() {
+        return listViewItemList.size();
+    }
+
+    @Override
+    public Recipe getItem(int i) {
+        return listViewItemList.get(i);
+    }
+
+    @Override
+    public long getItemId(int i) {
+        return 0;
+    }
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        final int pos = position;
+        final Context context = parent.getContext();
+
+        // "listview_item" Layout을 inflate하여 convertView 참조 획득.
+        if (convertView == null) {
+            LayoutInflater inflater = (LayoutInflater) context.getSystemService(Context.LAYOUT_INFLATER_SERVICE);
+            convertView = inflater.inflate(R.layout.item_recipe, parent, false);
+        }
+
+        // 화면에 표시될 View(Layout이 inflate된)으로부터 위젯에 대한 참조 획득
+        TextView numberView = (TextView) convertView.findViewById(R.id.recipe_number) ;
+        TextView textView = (TextView) convertView.findViewById(R.id.recipe_text) ;
+
+        // Data Set(listViewItemList)에서 position에 위치한 데이터 참조 획득
+        Recipe listViewItem = listViewItemList.get(position);
+
+        // 아이템 내 각 위젯에 데이터 반영
+        String number = String.valueOf(listViewItem.number) + ".";
+        numberView.setText(number);
+        textView.setText(listViewItem.recipe_name+"("+listViewItem.nation+")");
+
+        return convertView;
+    }
+
+    //리스트에 데이터 추가
+    public void addItem(ArrayList<Recipe> list) {
+
+        listViewItemList.addAll(list);
+
+    }
+}
+package com.student.project;
+
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.TextView;
+
+public class RecipeShowActivity extends AppCompatActivity {
+
+    TextView name, material, use;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_recipe_show);
+
+        name = (TextView) findViewById(R.id.recipe_show_name);
+        material = (TextView) findViewById(R.id.recipe_show_material);
+        use = (TextView) findViewById(R.id.recipe_show_use);
+
+        String nameText = getIntent().getStringExtra("recipe_name");//레시피 이름 가져오기
+        String materialText = getIntent().getStringExtra("material");//재료 가져오기
+        String useText = getIntent().getStringExtra("use");//사용법 가져오기
+
+        name.setText(nameText);
+        material.setText(materialText);
+        use.setText(useText);
+
+    }
+
+}
+package com.student.project;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Spinner;
+
+public class ResisterActivity extends AppCompatActivity {
+
+    ArrayAdapter<CharSequence> adapter;
+    Spinner spinner;
+    String spinnerSelected;
+
+    EditText studentID;
+    EditText studentname;
+    EditText password;
+    EditText major;
+    EditText refinement;
+    EditText MSCmath;
+    EditText MSCscience;
+    EditText MSCprocessing;
+    EditText avergrade;
+
+    Button confirm;
+    private DBHelper dbHelper;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_resister);
+
+        studentID = (EditText) findViewById(R.id.edit_studentID);
+        studentname = (EditText) findViewById(R.id.edit_studentname);
+        password = (EditText) findViewById(R.id.edit_password);
+        major = (EditText) findViewById(R.id.edit_major);
+        refinement = (EditText) findViewById(R.id.edit_refinement);
+        MSCmath = (EditText) findViewById(R.id.edit_MSCmath);
+        MSCscience = (EditText) findViewById(R.id.edit_MSCscience);
+        MSCprocessing = (EditText) findViewById(R.id.edit_MSCprocessing);
+        avergrade = (EditText) findViewById(R.id.edit_avergrade);
+
+        confirm = (Button) findViewById(R.id.register_confirm);
+
+        dbHelper = new DBHelper(getApplicationContext(), "Student.db", null, 1);
+
+        /** adapter */
+        adapter = ArrayAdapter.createFromResource(this, R.array.Data, android.R.layout.simple_list_item_1);
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+
+        /** adapter에 담긴 데이터를 보여줄 스피너 */
+        spinner = (Spinner) findViewById(R.id.spinner_department);
+        spinner.setAdapter(adapter);
+
+        /** 스피너에 연결한 리스너 */
+        spinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
+                //Callback method to be invoked when an item in this view has been selected.
+                //아이템이 선택 되었을 때
+
+                //사용자가 선택한 값
+                spinnerSelected = (String) spinner.getSelectedItem();
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
+                //Callback method to be invoked when the selection disappears from this view.
+                //아이템이 선택되지 않았을 때
+
+            }
+        });
+
+        //확인 버튼
+        confirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                //학생 정보 db 저장
+                dbHelper.insertStudent(studentID.getText().toString(), spinnerSelected, studentname.getText().toString(), password.getText().toString(),
+                        major.getText().toString(), refinement.getText().toString(), MSCmath.getText().toString(), MSCscience.getText().toString(),
+                        MSCprocessing.getText().toString(), avergrade.getText().toString());
+
+                Intent intent = new Intent(ResisterActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+
+    }
+
+}
+package com.student.project;
+
+public class Student {
+    String studentID;
+    String department;
+    String studentname;
+    String password;
+    String major;
+    String refinement;
+    String MSCmath;
+    String MSCscience;
+    String MSCprocessing;
+    String avergrade;
+}
+package com.student.project;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.Snackbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+public class StudentInfoActivity extends AppCompatActivity {
+
+    TextView studentID;
+    TextView department;
+    TextView studentname;
+    TextView major;
+    TextView refinement;
+    TextView MSCmath;
+    TextView MSCscience;
+    TextView MSCprocessing;
+    TextView avergrade;
+
+    Button license, recipe, logout;
+
+    DBHelper dbHelper;
+
+    String departmentText, studentIDText;
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_student_info);
+
+        dbHelper = new DBHelper(getApplicationContext(), "Student.db", null, 1);
+
+        studentID = (TextView) findViewById(R.id.info_studentID);
+        department= (TextView) findViewById(R.id.info_department);
+        studentname= (TextView) findViewById(R.id.info_studentname);
+        major= (TextView) findViewById(R.id.info_major);
+        refinement= (TextView) findViewById(R.id.info_refinement);
+        MSCmath= (TextView) findViewById(R.id.info_MSCmath);
+        MSCscience= (TextView) findViewById(R.id.info_MSCscience);
+        MSCprocessing= (TextView) findViewById(R.id.info_MSCprocessing);
+        avergrade= (TextView) findViewById(R.id.info_avergrade);
+
+        studentIDText = getIntent().getStringExtra("studentID");
+
+        Student studentInfo = dbHelper.getStudent(studentIDText);// 학생 정보 db 검색
+
+        studentID.setText("학번 : "+studentIDText);
+
+        departmentText = studentInfo.department;
+        department.setText("학과 : "+departmentText);
+        studentname.setText("이름 : "+studentInfo.studentname);
+        major.setText("전공 : "+studentInfo.major+" / 54");
+        refinement.setText("교양 : "+studentInfo.refinement+" / 20");
+        MSCmath.setText("수학 : "+studentInfo.MSCmath);
+        MSCscience.setText("과학 : "+studentInfo.MSCscience);
+        MSCprocessing.setText("전산 : "+studentInfo.MSCprocessing);
+        avergrade.setText("평균 : "+studentInfo.avergrade);
+
+
+        license = (Button) findViewById(R.id.info_license);
+        recipe = (Button) findViewById(R.id.info_recipe);
+        logout = (Button) findViewById(R.id.info_logout);
+
+        //자격증 버튼
+        license.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StudentInfoActivity.this, LicenseListActivity.class);
+                intent.putExtra("studentID", studentIDText);
+                intent.putExtra("department", departmentText);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        //레시피 버튼
+        recipe.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StudentInfoActivity.this, RecipeListActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+            }
+        });
+
+        //로그아웃 버튼
+        logout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StudentInfoActivity.this, MainActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP | Intent.FLAG_ACTIVITY_SINGLE_TOP | Intent.FLAG_ACTIVITY_NEW_TASK);
+                startActivity(intent);
+                finish();
+            }
+        });
+    }
+
+}
+
+

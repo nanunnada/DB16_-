@@ -1,0 +1,80 @@
+public void onCreate(SQLiteDatabase db) {
+        // 새로운 테이블 생성
+        db.execSQL("CREATE TABLE recipe_nation (id INTEGER PRIMARY KEY AUTOINCREMENT, recipe_name TEXT ,beef TEXT ," +
+                "pork TEXT ,chicken TEXT ,onion TEXT ,springonion TEXT ,ginger TEXT ,garlic TEXT ,pepper TEXT ,kimchi TEXT ," +
+                "egg TEXT ,milk TEXT ,water TEXT ,cookingwine TEXT ,fish TEXT ,mushroom TEXT ,shellfish TEXT ,shrimp TEXT ," +
+                "rice TEXT ,bellpepper TEXT ,pumpkin TEXT ,cookingoil TEXT ,soysauce TEXT ,sesameoil TEXT ,sesame TEXT ," +
+                "chilipowder TEXT ,powder TEXT ,cuttlefish TEXT ,veryhotpepper TEXT ,redpepperpaste TEXT ,sugar TEXT ," +
+                "carrot TEXT ,friuts TEXT ,othermaterials TEXT ,nation TEXT ,recipeuse TEXT );");
+
+
+        db.execSQL("CREATE TABLE student (studentID TEXT , department TEXT , studentname TEXT , password TEXT ," +
+                " major TEXT , refinement TEXT , MSCmath TEXT , MSCscience TEXT , MSCprocessing TEXT, avergrade TEXT);");
+
+        db.execSQL("CREATE TABLE license (id INTEGER PRIMARY KEY AUTOINCREMENT, license_list TEXT, department_license TEXT, information_license TEXT);");
+    }
+
+public void insertStudent(String studentID, String department, String studentname, String password, String major
+                                , String refinement, String MSCmath, String MSCscience, String MSCprocessing, String avergrade) {
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+        // DB에 입력한 값으로 행 추가
+        ContentValues values = new ContentValues();
+        values.put("studentID",studentID);
+        values.put("department",department);
+        values.put("studentname",studentname);
+        values.put("password",password);
+        values.put("major",major);
+        values.put("refinement",refinement);
+        values.put("MSCmath",MSCmath);
+        values.put("MSCscience",MSCscience);
+        values.put("MSCprocessing",MSCprocessing);
+        values.put("avergrade",avergrade);
+        db.insert("student",null,values);
+
+        db.close();
+    }
+
+public void insertLicense() {//license값 입력
+
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+
+        //데이터 입력
+        db.execSQL("INSERT INTO license VALUES(null,'Industrial Engineer Information Processing','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Industrial Engineer Information Processing')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Information Management','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Professional Engineer Information Management')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Computer System Application','computer','http://www.q-net.or.kr/crf005.do -> Select information processing from the list -> Select Professional Engineer Computer System Application')");
+        db.execSQL("INSERT INTO license VALUES(null,'Industrial Engineer Electricity','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Industrial Engineer Electricity')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Electric Work','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Engineer Electric Work')");
+
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Building Electrical Facilities','electric','http://www.q-net.or.kr/crf005.do -> Select electric from the list -> Select Professional Engineer Building Electrical Facilities')");
+        db.execSQL("INSERT INTO license VALUES(null,'Craftsman Electronic Apparatus','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Craftsman Electronic Apparatus')");
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Electronic Application','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Professional Engineer Electronic Application')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Semiconductor Design','electron','http://www.q-net.or.kr/crf005.do -> Select electronic from the list -> Select Engineer Semiconductor Design')");
+        db.execSQL("INSERT INTO license VALUES(null,'Engineer Chemical Analysis','chemistry','http://www.q-net.or.kr/crf005.do -> Select chemistry from the list -> Select Engineer Chemical Analysis')");
+
+        db.execSQL("INSERT INTO license VALUES(null,'Professional Engineer Chemical Industry','chemistry','http://www.q-net.or.kr/crf005.do -> Select chemistry from the list -> Select Professional Engineer Chemical Industry')");
+        db.close();
+    }
+
+   public void insertRecipe() {
+
+        // 읽고 쓰기가 가능하게 DB 열기
+        SQLiteDatabase db = getWritableDatabase();
+
+        //데이터 입력
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'Shrimp Fried Rice','0','0','0','0','2root','0','1/2spoon','1/3spoon','0','2','0','0','0','0','0','0','100g','210g','1/4','1/3','1spoon','1spoon','1/2spoon','1Tspoon','0','0','0','0','0','0','0','0','0','korean','1. In a saucepan bring water to a boil. Add rice and stir. Reduce heat, cover and simmer for 20 minutes. Set aside and allow rice to cool./n 2. Heat a large skillet or wok for 2 minutes. When the skillet or wok is hot, pour in vegetable oil, bean sprouts and onions. Mix well and cook for 3 minutes./n 3. Mix in cooled rice and shrimp and cook for another 3 minutes. Stirring constantly. /n 4. Mix in green onions, eggs, salt ,pepper, soy sauce and sesame oil. Cook for another 4 minutes, stirring continuously, until eggs are cooked and everything is blended evenly.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'cuttlefish Kimchi pan cake','0','0','0','0','0','0','0','0','100g','0','0','100g','0','0','0','0','0','0','0','0','4spoon','0','0','0','1/2spoon','buchimpowder1/2spoon','80g','0','0','0','0','0','0','korean','1.Stir together the kimchi, kimchi juice, flour, eggs, and green onion in a bowl. /n 2.Heat vegetable oil over medium heat in a large skillet. Using about 1/4 cup of batter for each pancake, pour into skillet, spreading as thin as possible./n 3.Cook pancakes until set and lightly browned, turning once, 3 to 5 minutes per side. Season to taste with salt./n 4.Whisk together the rice vinegar, soy sauce, sesame oil, chili pepper flakes, and toasted sesame seeds. Serve with the pancakes.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'stir-fried spicy pork','0','300g','0','1/2','0','0','1spoon','1/6spoon','0','0','0','0','4spoon','0','0','0','0','0','0','0','0','3/2spoon','1spoon','0','0','0','0','2','2spoon','1spoon','0','0','0','korean','1. In a thick bottomed wok or pan./n 2. Heat up the pan over high heat./n 3. Mix and stir all ingredients with a wooden spoon, until the pork is cooked thoroughly. It will take about 10 minutes and the onion will look translucent and mushy when it is done./n 4. Transfer it to a serving plate and serve with a bowl of rice, some lettuce, a few more side dishes (if you want), some soup')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'bulgogi','250g','0','0','1/2','15cm','0','1spoon','little','0','0','0','300','1spoon','0','0','0','0','0','0','0','0','4spoon','1spoon','0','0','0','0','0','0','2spoon','1/8','0','cellophane noodles1/2','korean','1.In a large resealable plastic bag, combine soy sauce, sesame oil, sesame seeds, garlic, sugar, salt, black pepper, and MSG. Place beef, carrots, and onions in the bag./n 2.seal, and shake to coat the vegetables and beef with the sauce. Refrigerate for at least 2 1/2 hours. I prefer to marinate mine overnight./n 3.Preheat an outdoor grill for high heat. Remove meat and vegetables from marinade, and place on a large sheet of aluminum foil; seal. Discard marinade. /n 4.Place on grill, and cook for 15 to 20 minutes, or to desired doneness.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'jajangmyeon','0','200g','0','1/4','1/4','0','0','0','0','0','0','little','0','0','0','0','0','0','0','0','little','0','0','0','0','ja-jangpowder2~3','0','0','0','0','1/5','0','noodle','chinese','1. Bring a large pot of water to a boil and add noodles. Boil the noodles for 8 minutes until soft (just beyond al dente). Reserve 1 1/2 cups of the noodle cooking water, drain the noodles, and rinse with cold water to cool to room temperature. Drain well and reserve./n 2. While the noodles are boiling, heat 2 tablespoons of vegetable oil on high heat in a wok or large skillet until lightly smoking. Add diced pork belly and shoulder and render for 2 minutes. /n 3. Add ginger and garlic and saute for 1 minute, being mindful not to burn. Add carrots, potatoes, onions, and zucchini and saute for 6 minutes, until vegetables are softened. /n 4. Mix in the chunjang, sugar, 1 cup of noodle water, and salt to taste. Cook for 7 minutes, or until the sauce has thickened and the potatoes are fully cooked. If you need to add more noodle water, do so./n 5. Divide noodles into 2 bowls and top with warm sauce. Garnish with julienned zucchini and pickled yellow daikon, if using. As an alternative, the sauce can be served over cooked rice for a dish called jjajangbap.')");
+
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'bulgogi jjamppong','200g','0','0','1/4','1','2g','1/2spoon','1/2spoon','0','0','0','700','1spoon','mussel130g','0','0','10g','0','0','0','0','3spoon','0','0','3/2','0','0','5g','0','1spoon','20g','0','cabbage40g chives20g','chinese','1. Put chopped garlic, sugar, soy sauce, pepper, and sake in a bowl and make a bulgogi sauce./n 2. Onions and green onions are cut well and put on a marinade with beef./n 3. Put pan and ginger in the pan and crush them./n 4. Put the dried prawns and fry, then add the cabbage, carrots and onions, fry them, add the soy sauce, and roast the vegetables until they breathe./n 5. Put red pepper powder and Cheongyang red pepper./n 6. Add mussel, stir-fry, add water and boil./n 7. Fry the roasted meat on the pan./n 8. If you put chanpon and bulgogi on boiled noodles, it is completed.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'Shrimp with Chili Sauce','0','0','0','0','1/3','0','4','0','0','1','0','2/3cup','1spoon','0','0','0','12','0','0','0','little','1spoon','0','0','0','starch powder3spoon','0','1','0','2spoon','0','0','Ketchup 3spoon oyster sauce 0.5spoon','chinese','1.Rinse shrimp in cold water and pat dry with paper towels./n 2.Set up 3 shallow bowls. In the first, stir together 1/4 cup flour, 1/2 teaspoon garlic powder and 1/2 teaspoon salt. In the second, add eggs and lightly beat with a fork. In the third, combine 1 1/2 cups coconut flakes and 1/2 cup panko bread crumbs./n 3.Dredge shrimp in flour, dip in beaten egg and then finally dip in coconut crumb mixture using your hands to press the mixture onto the shrimp. Transfer to a Reynolds(R) Parchment Paper lined baking sheet and repeat with remaining shrimp. Once all of the shrimp are breaded, saute right away./n 4.Place a large non-stick pan over medium heat and add enough oil to generously cover the bottom. Once oil is hot, add shrimp and saute 2 to 3 minutes, flip and saute another 2 minutes until golden brown on both sides and shrimp is firm and pink. Cook in batches and do not overcrowd the pan. /n 5.Stir together the sweet chili sauce and apricot preserves and serve with coconut shrimp.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'tonkatsu','0g','a pork cutlet1','0','1/2','0','0','0','0','0','2','0','0','0','0','0','0','0','1person','0','0','0','0','0','0','0','0','0','0','0','0','0','0','katsuo soup3spoon,a crown daisy1','japanese','1.Mix dashi, sugar, mirim, soy sauce, and salt together in a small bowl./n 2.Heat vegetable oil in a small skillet over medium heat. Add onion; cook and stir until translucent, about 5 minutes. Stir in dashi mixture. tonkatsu slices carefully on top of the onions. /n 3.Drizzle eggs around the slices. Cover skillet and cook until eggs are set, about 2 minutes. /n 4.Divide rice between 2 bowls. Top each with half the onions, eggs, and pork slices.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'a bowl of rice teriyaki chicken','0','0','250g','0','0','0','1spoon','1/3spoon','0','0','0','0','1spoon','0','0','4','0','1person','0','0','2spoon','2spoon','0','little','0','0','0','0','0','0','0','tomato 4','been1/2 honey1spoon','japanese','1. In a large bowl, whisk together all marinade ingredients: 1/4 cup soy sauce, 1/3 cup orange juice, 3 Tbsp honey, 1 tsp ginger and 1 tsp sesame oil./n 2. Cut chicken into 1-inch pieces and place into marinade. Stir and cover with plastic wrap and marinate on the counter 20 min./n 3. Heat a large non-stick pan over medium-high heat. Add 1 Tbsp olive oil. Remove chicken from marinade with a slotted spoon, reserving marinade in the bowl. Add chicken to the hot pan and saute, stirring occasionally until golden and cooked through (5 min)./n 4. Remove pan from heat and transfer chicken to a bowl. (Don’t leave the empty pan over the heat or you may scorch the bottom of the pan and ruin the sauce ? been there, done that and if it happens to you, continue making the sauce using a clean pan)./n 5. Pour reserved marinade into the pan, add 1 1/2 Tbsp butter (it is in bold for my own sake because I have forgotten it before and it just was not the same) and place back over medium/high heat. Bring to a boil stirring constantly until slightly thickened (1 min) then remove from heat. Add chicken back to the pan and stir to combine./n 6. Divide rice bowls.')");
+        db.execSQL("INSERT INTO recipe_nation VALUES(null,'oyakodon/a bowl of rice topped with scrambled eggs','0','0','250g','1/2','0','0','0','0','0','2','0','0','1.5spoon','0','anchovy4','dryshiitake1','0','1person','0','0','0','0','0','0','0','0','0','0','0','0','0','0','katsuo0.5cup kelp2 Mentsuyu3spoon ','japanese','1.Bring the rice and water to a boil in a saucepan; reduce heat to medium-low, cover, and simmer until the rice is tender and the liquid has been absorbed, 20 to 25 minutes./n 2.Bring the chicken stock to a boil in a small saucepan. Stir in the soy sauce and brown sugar until the sugar has dissolved. Reduce heat to low; keep warm./n 3.Heat several tablespoons of the chicken sauce in a skillet over medium heat. Cook and stir the onion and shiitake mushrooms in the sauce until the onion has softened, about 3 minutes. Add the chicken, green onions, and a few more tablespoons of the sauce./n 4.continue cooking until the chicken is no longer pink in the center, about 5 minutes more. Spread the chicken mixture evenly over the skillet; pour the beaten egg overtop. Reduce heat to medium-low and sprinkle with the snow peas. Cook and stir until the egg has firmed and is no longer runny, about 3 minutes./n 5.Divide the rice between two bowls and spoon the egg mixture evenly overtop. Pour additional chicken sauce over the rice to serve.')");
+
+
+        db.close();
+    }
